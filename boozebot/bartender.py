@@ -58,3 +58,17 @@ def serve(drink):
             for i in r['ingredients']:
                 pump(i['name'], i['duration'])
     logger.info('Served %s', drink)
+
+
+def rename_pump(pump, ingredient):
+    global pumps
+    p = pumps[int(pump) - 1]
+    pumps[int(pump) - 1] = {'name': ingredient, 'pin': p['pin']}
+
+
+def ingredients():
+    return [p['name'] for p in pumps]
+
+
+def drinks():
+    return receipts

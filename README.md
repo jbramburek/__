@@ -48,7 +48,3 @@ TBD
 * recipe management using Slack
     * add
     * remove
-    * list
-* ingredient names management using Slack
-    * rename
-    * list
