@@ -45,13 +45,25 @@ async def handle_drinks(command, sender, channel):
     await slack.post_message(channel, message)
 
 
+async def handle_drink_remove(command, sender, channel):
+    drink = command[13:].lower()
+    bartender.remove_drink(drink)
+    await slack.post_message(channel, 'Drink {} removed.'.format(drink))
+
+
+async def handle_drink_add(command, sender, channel):
+    pass
+
+
 commands = {
     'exact_matches': {
         'list ingredients': handle_ingredients,
         'drinks menu': handle_drinks},
     'startswith_matches': {
         'serve ': handle_serve,
-        'rename pump ': handle_pump_rename}}
+        'rename pump ': handle_pump_rename,
+        'remove drink ': handle_drink_remove,
+        'add drink ': handle_drink_add}}
 
 
 async def handle_message(command, sender, channel):
@@ -65,9 +77,16 @@ async def handle_message(command, sender, channel):
             await h(command, sender, channel)
             handled = True
     if not handled:
-        await slack.post_message(
-            channel,
-            '<@{}>, I do not understand the command.'.format(sender['id']))
+        c = []
+        for m in ['exact_matches', 'startswith_matches']:
+            for cmd in commands[m].keys():
+                c.append(cmd)
+        message = (
+            '<@{}>, I am a very primitive AI. In fact, I am more artificial '
+            'than intelligent. I might need a bit more help to understand '
+            'what you mean. This is the list of phrases I know: {}.').format(
+            sender['id'], ', '.join(c))
+        await slack.post_message(channel, message)
 
 
 if __name__ == "__main__":

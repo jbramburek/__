@@ -47,4 +47,3 @@ TBD
 ## TODO
 * recipe management using Slack
     * add
-    * remove

@@ -12,12 +12,12 @@ logger = logging.getLogger(__name__)
 SMALL_SHOT = 1.5
 BIG_SHOT = 2.8
 
-pumps = [
+_pumps = [
     {'name': 'rum', 'pin': OutputDevice(6)},
     {'name': 'cola', 'pin': OutputDevice(13)},
     {'name': 'gin', 'pin': OutputDevice(19)},
     {'name': 'tonic', 'pin': OutputDevice(26)}]
-receipts = [
+_drinks = [
     {
         'name': 'cuba libre',
         'ingredients': [
@@ -30,19 +30,33 @@ receipts = [
 
 
 def turn_off():
-    for p in pumps:
+    for p in _pumps:
         p['pin'].on()
     time.sleep(5)
 
 
 def turn_on():
-    for p in pumps:
+    for p in _pumps:
         p['pin'].off()
     time.sleep(5)
 
 
-def pump(ingredient, duration):
-    for p in pumps:
+def _inventory(drink=None):
+    missing = []
+    unavailable = []
+    for d in _drinks:
+        if drink and d['name'] != drink:
+            continue
+        for i in d['ingredients']:
+            if i['name'] not in ingredients():
+                unavailable.append(d['name'])
+                if i['name'] not in missing:
+                    missing.append(i['name'])
+    return unavailable, missing
+
+
+def pour(ingredient, duration):
+    for p in _pumps:
         if p['name'] == ingredient:
             logger.info('Pouring %s for %s seconds.', ingredient, duration)
             p['pin'].off()
@@ -52,23 +66,35 @@ def pump(ingredient, duration):
 
 
 def serve(drink):
-    logger.info('Serving %s', drink)
-    for r in receipts:
+    logger.info('Pouring %s ...', drink)
+    for r in _drinks:
         if r['name'] == drink:
             for i in r['ingredients']:
-                pump(i['name'], i['duration'])
-    logger.info('Served %s', drink)
+                pour(i['name'], i['duration'])
+    logger.info('Poured %s.', drink)
 
 
 def rename_pump(pump, ingredient):
-    global pumps
-    p = pumps[int(pump) - 1]
-    pumps[int(pump) - 1] = {'name': ingredient, 'pin': p['pin']}
+    global _pumps
+    p = _pumps[int(pump) - 1]
+    _pumps[int(pump) - 1] = {'name': ingredient, 'pin': p['pin']}
 
 
 def ingredients():
-    return [p['name'] for p in pumps]
+    return [p['name'] for p in _pumps]
 
 
 def drinks():
-    return receipts
+    return _drinks
+
+
+def remove_drink(drink):
+    global _drinks
+    for d in list(_drinks):
+        if d['name'] == drink:
+            _drinks.remove(d)
+
+
+def add_drink(drink, ingredients):
+    global _drinks
+    _drinks.append({'name': drink, 'ingredients': ingredients})
