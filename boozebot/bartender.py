@@ -4,7 +4,7 @@ import logging
 try:
     from gpiozero import OutputDevice
 except Exception:
-    from fake_gpiozero import OutputDevice
+    from boozebot.fake_gpiozero import OutputDevice
 import time
 
 

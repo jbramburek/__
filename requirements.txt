@@ -1,2 +1,2 @@
-gpiozero
-slackclient
+#gpiozero
+aiohttp
