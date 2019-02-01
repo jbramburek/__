@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 import argparse
 import asyncio
+import logging
 
 from boozebot import bartender, slack
+
+logging.basicConfig()
 
 
 async def handle_serve(command, sender, channel):
     drink = command[6:].lower()
+    await slack.post_message(
+        channel, 'Preparing {} for <@{}> ...'.format(drink, sender['id']))
     bartender.serve(drink)
+    await slack.post_message(
+        channel, '<@{}>, your {} is ready.'.format(sender['id'], drink))
 
 
 async def handle_ingredients(command, sender, channel):
@@ -49,12 +56,12 @@ commands = {
 
 async def handle_message(command, sender, channel):
     handled = False
-    for c, h in command['exact_matches']:
+    for c, h in commands['exact_matches'].items():
         if c == command:
             await h(command, sender, channel)
             handled = True
-    for c, h in command['startswith_matches']:
-        if c.startswith(command):
+    for c, h in commands['startswith_matches'].items():
+        if command.startswith(c):
             await h(command, sender, channel)
             handled = True
     if not handled:
