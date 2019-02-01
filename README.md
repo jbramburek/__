@@ -6,18 +6,18 @@ Dunder
 
 ### Setup environment ###
 
-- Install `python2`
+- Install `python3`
 - install virtualenv
-  - `pip install virtualenv`
+  - `pip3 install virtualenv`
 - create virtualenv `dunder`
-  - `virtualenv dunder`
-  - `source dunder/bin/activate`
+  - `virtualenv ../../envs/dunder`
+  - `source ../../envs/dunder/bin/activate`
 - install dependencies
-  - `pip install -r requirements.txt`
+  - `pip3 install -r requirements.txt`
   
 ### Run dunder ###
 
 ```bash
 export SLACK_BOT_TOKEN=<BOT_TOKEN>
-./slackbot.py
+pyhon3 ./slackbot.py
 ```

@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-from cocktail import serve_drink
+from bartender import serve_drink
 
 import os
 import time
@@ -8,7 +8,7 @@ import re
 from slackclient import SlackClient
 
 # CONSTANTS
-RTM_READ_DELAY = 1 # 1 second delay between reading from RTM
+RTM_READ_DELAY = 1  # 1 second delay between reading from RTM
 EXAMPLE_COMMAND = "do"
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
 SLACK_BOT_TOKEN_ENV = 'SLACK_BOT_TOKEN'
