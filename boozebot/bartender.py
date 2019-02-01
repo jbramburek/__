@@ -95,6 +95,9 @@ def remove_drink(drink):
             _drinks.remove(d)
 
 
-def add_drink(drink, ingredients):
+def add_drink(drink, **ingredients):
+    i = []
+    for name, duration in ingredients.items():
+        i.append({'name': name, 'duration': duration})
     global _drinks
-    _drinks.append({'name': drink, 'ingredients': ingredients})
+    _drinks.append({'name': drink, 'ingredients': i})

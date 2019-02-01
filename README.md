@@ -42,8 +42,3 @@ TBD
     ```
     @<botname> serve cuba libre
     ```
-
-
-## TODO
-* recipe management using Slack
-    * add

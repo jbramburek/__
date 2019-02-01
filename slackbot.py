@@ -52,7 +52,17 @@ async def handle_drink_remove(command, sender, channel):
 
 
 async def handle_drink_add(command, sender, channel):
-    pass
+    # @boozebot Add drink cuba libre (rum - 1s, coca cola - 10.5s)
+    recipe = command[10:]
+    drink = recipe[:recipe.index('(')].strip()
+    contents = recipe[recipe.index('(') + 1:recipe.index(')')].strip()
+    contents = contents.split(',')
+    ingredients = {}
+    for c in contents:
+        parts = [p.strip() for p in c.split('-')]
+        ingredients[parts[0]] = float(parts[1].replace('s', ''))
+    bartender.add_drink(drink, **ingredients)
+    await slack.post_message(channel, 'Drink {} added.'.format(drink))
 
 
 commands = {
